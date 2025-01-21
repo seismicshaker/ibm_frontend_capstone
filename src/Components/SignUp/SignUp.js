@@ -30,49 +30,48 @@ const SignUp = () => {
     // Function to handle form submission
     const register = async (e) => {
         e.preventDefault(); // Prevent default form submission
-        try {
-            const response = await fetch(`${API_URL}/api/auth/register`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    role: role,
-                    name: name,
-                    email: email,
-                    password: password,
-                    phone: phone,
-                }),
-            });
 
-            const json = await response.json(); // Parse the response JSON
+        const response = await fetch(`${API_URL}/api/auth/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                role: role,
+                name: name,
+                email: email,
+                password: password,
+                phone: phone,
+            }),
+        });
 
-            if (json.authtoken) {
-                // Store user data in session storage
-                sessionStorage.setItem("auth-token", json.authtoken);
-                sessionStorage.setItem("name", name);
-                sessionStorage.setItem("phone", phone);
-                sessionStorage.setItem("email", email);
+        const json = await response.json(); // Parse the response JSON
 
-                // Redirect user to home page
-                navigate("/");
-                window.location.reload(); // Refresh the page
-            } else {
-                if (json.errors) {
-                    setShowerr(json.errors[0].msg); // Display the first error message
-                } else {
-                    setShowerr(json.error);
+        if (json.authtoken) {
+            // Store user data in session storage
+            sessionStorage.setItem("auth-token", json.authtoken);
+            sessionStorage.setItem("name", name);
+            sessionStorage.setItem("phone", phone);
+            sessionStorage.setItem("email", email);
+
+            // Redirect user to home page
+            navigate("/");
+            window.location.reload(); // Refresh the page
+        } else {
+            // Handle registration errors
+            if (json.errors) {
+                for (const error of json.errors) {
+                setShowerr(error.msg); // Set general error message from API response
                 }
-            } 
-        } catch (error) {
-            console.error("An error occurred during registration:", error);
-            setError("An unexpected error occurred.", error);
-        }
+            } else {
+                setShowerr(json.error); // Set general error message if no specific errors provided
+            }
+        } 
+
     };
   
     return (
     <div className="container">
-      {/* Main container with margin-top */}
       <div className="signup-grid">
         <div className="signup-text">
             <h1>Sign Up</h1>
