@@ -25,7 +25,7 @@ const Login = () => {
           <form>
             {/* Form group for email input */}
             <div className="form-group">
-              <label for="email">Email</label>
+              <label htmlFor="email">Email</label>
               <input
                 type="email"
                 name="email"
@@ -37,7 +37,7 @@ const Login = () => {
             </div>
             {/* Form group for password input */}
             <div className="form-group">
-              <label for="password">Password</label>
+              <label htmlFor="password">Password</label>
               <input
                 type="password"
                 name="password"
