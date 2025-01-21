@@ -1,50 +1,72 @@
 import React, { useState } from "react"; // Importing the necessary modules from React library
 import { Link, useNavigate } from "react-router-dom"; // Importing the Link component from react-router-dom library
 import "./SignUp.css"; // Importing the CSS styles for the SignUp component
+import { API_URL }  from "../../config.js";
 
 // Defining the Function component SignUp
 const SignUp = () => {
     // State variables using useState hook
+    const [role, setRole] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [showerr, setShowerr] = useState(''); // State to show error messages
+    const [showPhoneErr, setShowPhoneErr] = useState(''); // State for phone number specific error message    const [error, setError] = useState(null); // Error Msg
+    const [error, setError] = useState(null); // General error message for display
     const navigate = useNavigate(); // Navigation hook from react-router
+    
+    const handlePhoneBlur = (e) => {
+        const phoneNumber = e.target.value;
+
+        // Update phone number error message based on validation
+        if (phoneNumber.length === 10) {
+            setShowPhoneErr(''); // Clear error if phone number has 10 digits
+        } 
+        else if (phoneNumber.length > 0 && phoneNumber.length < 10) {
+            setShowPhoneErr('Phone number must be exactly 10 characters long.'); // Set error for invalid length
+        }
+    };
     // Function to handle form submission
     const register = async (e) => {
         e.preventDefault(); // Prevent default form submission
-        // API Call to register user
-        const response = await fetch(`${API_URL}/api/auth/register`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: name,
-                email: email,
-                password: password,
-                phone: phone,
-            }),
-        });
-        const json = await response.json(); // Parse the response JSON
-        if (json.authtoken) {
-            // Store user data in session storage
-            sessionStorage.setItem("auth-token", json.authtoken);
-            sessionStorage.setItem("name", name);
-            sessionStorage.setItem("phone", phone);
-            sessionStorage.setItem("email", email);
-            // Redirect user to home page
-            navigate("/");
-            window.location.reload(); // Refresh the page
-        } else {
-            if (json.errors) {
-                for (const error of json.errors) {
-                    setShowerr(error.msg); // Show error messages
-                }
+        try {
+            const response = await fetch(`${API_URL}/api/auth/register`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    role: role,
+                    name: name,
+                    email: email,
+                    password: password,
+                    phone: phone,
+                }),
+            });
+
+            const json = await response.json(); // Parse the response JSON
+
+            if (json.authtoken) {
+                // Store user data in session storage
+                sessionStorage.setItem("auth-token", json.authtoken);
+                sessionStorage.setItem("name", name);
+                sessionStorage.setItem("phone", phone);
+                sessionStorage.setItem("email", email);
+
+                // Redirect user to home page
+                navigate("/");
+                window.location.reload(); // Refresh the page
             } else {
-                setShowerr(json.error);
-            }
+                if (json.errors) {
+                    setShowerr(json.errors[0].msg); // Display the first error message
+                } else {
+                    setShowerr(json.error);
+                }
+            } 
+        } catch (error) {
+            console.error("An error occurred during registration:", error);
+            setError("An unexpected error occurred.", error);
         }
     };
   
@@ -52,10 +74,8 @@ const SignUp = () => {
     <div className="container">
       {/* Main container with margin-top */}
       <div className="signup-grid">
-        {/* Grid layout for sign-up form */}
         <div className="signup-text">
-          {/* Title for the sign-up form */}
-          <h1>Sign Up</h1>
+            <h1>Sign Up</h1>
         </div>
         <div className="signup-text1">
           Already a member?
@@ -64,79 +84,79 @@ const SignUp = () => {
             </span>
         </div>
         <div className="signup-form">
-          {/* Form for user sign-up */}
-          <form>
-            {/* Start of the form */}
-
+          <form onSubmit={register}>
+            {error && <div className="error-message" style={{ color: 'red' }}>{error}</div>}
             <div className="form-group">
-              {/* Form group for user's role */}
-              <label for="role">Role</label>
-              {/* Label for name input field */}
-              <div className="select-group">
-                <select name="role" id="role" aria-placeholder="Select a role">
-                  <option>Select a role</option>
-                  <option value="doctor">Doctor</option>
-                  <option value="patient">Patient</option>
-                </select>
-                <div className="select-icon">
-                  <i className="fa fa-chevron-down" aria-hidden="true"></i>
-                </div>
+                <label htmlFor="role">Role</label>
+                <div className="select-group">
+                    <select 
+                        value={role}
+                        onChange={(e) => setRole(e.target.value)}
+                        name="role" 
+                        id="role"
+                        required>
+                            <option>Select a role</option>
+                            <option value="doctor">Doctor</option>
+                            <option value="patient">Patient</option>
+                    </select>
               </div>
             </div>
 
             <div className="form-group">
-              {/* Form group for user's name */}
-              <label for="name">Name</label>
-              {/* Label for name input field */}
-              <input
-                type="text"
-                name="name"
-                id="name"
-                required
-                className="form-control"
-                placeholder="Enter your name"
-                aria-describedby="helpId"
+                <label htmlFor="name">Name</label>
+                <input
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    type="text"
+                    name="name"
+                    id="name"
+                    required
+                    className="form-control"
+                    placeholder="Enter your name"
+                    aria-describedby="helpId"
               />
-              {/* Text input field for name */}
             </div>
 
             <div className="form-group">
-              {/* Form group for user's phone number */}
-              <label for="phone">Phone</label>
-              {/* Label for phone input field */}
-              <input
-                type="tel"
-                name="phone"
-                id="phone"
-                required
-                className="form-control"
-                placeholder="Enter your phone number"
-                aria-describedby="helpId"
-              />
-              {/* Tel input field for phone number */}
+                <label htmlFor="phone">Phone</label>
+                <input
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    onBlur={handlePhoneBlur}
+                    type="tel"
+                    name="phone"
+                    id="phone"
+                    required
+                    className="form-control"
+                    placeholder="Enter your phone number"
+                    aria-describedby="helpId"
+                />
+                {showPhoneErr && <div className="err" style={{ color: 'red' }}>{showPhoneErr}</div>}
             </div>
 
             <div className="form-group">
-              {/* Form group for user's email */}
-              <label for="email">Email</label>
-              {/* Label for email input field */}
-              <input
-                type="email"
-                name="email"
-                id="email"
-                required
-                className="form-control"
-                placeholder="Enter your email"
-                aria-describedby="helpId"
-              />
-              {/* Email input field */}
+                <label htmlFor="email">Email</label>
+                <input
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    type="email"
+                    name="email"
+                    id="email"
+                    required
+                    className="form-control"
+                    placeholder="Enter your email"
+                    aria-describedby="helpId"
+                />
+                {showerr && <div className="err" style={{ color: 'red' }}>{showerr}</div>}
             </div>
 
             <div className="form-group">
               {/* Form group for user's password */}
-              <label for="password">Password</label>
+              <label htmlFor="password">Password</label>
               {/* Label for password input field */}
               <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 name="password"
                 id="password"
                 required
@@ -148,21 +168,30 @@ const SignUp = () => {
             </div>
 
             <div className="btn-group">
-              {/* Button group for form submission and reset */}
-              <button
-                type="submit"
-                className="btn btn-primary mb-2 mr-1 waves-effect waves-light"
-              >
-                Submit
-              </button>
-              {/* Submit button */}
-              <button
-                type="reset"
-                className="btn btn-danger mb-2 waves-effect waves-light"
-              >
-                Reset
-              </button>
-              {/* Reset button */}
+                <button
+                    type="submit"
+                    id="submit"
+                    className="btn btn-primary mb-2 mr-1 waves-effect waves-light"
+                >
+                    Submit
+                </button>
+
+                <button
+                    type="reset"
+                    id="reset"
+                    onClick={() => { 
+                        setRole(''); 
+                        setName(''); 
+                        setPhone(''); 
+                        setEmail(''); 
+                        setPassword(''); 
+                        setShowerr('');
+                        setError(null); 
+                    }}
+                    className="btn btn-danger mb-2 mr-1 waves-effect waves-light"
+                >
+                    Reset
+                </button>
             </div>
           </form>
           {/* End of the form */}
