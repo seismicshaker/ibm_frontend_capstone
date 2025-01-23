@@ -64,7 +64,7 @@ const Login = () => {
       <div className="form_area">
         <label className="label" for="password">Password</label>
         <div className="password_input"> 
-        <input autocomplete="none" type="password" name="password" id="password" required className="form-control" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} aria-describedby="helpId"/><i className="far fa-eye" id="togglePassword"></i>
+        <input autoComplete="none" type="password" name="password" id="password" required className="form-control" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} aria-describedby="helpId"/><i className="far fa-eye" id="togglePassword"></i>
         </div>
       </div>
       <div className="button_area">
