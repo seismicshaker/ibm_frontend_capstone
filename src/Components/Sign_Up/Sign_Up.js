@@ -37,10 +37,8 @@ const Sign_Up = () => {
         if (json.authtoken) {
             sessionStorage.setItem("auth-token", json.authtoken);
             sessionStorage.setItem("name", name);
-            // phone and email
             sessionStorage.setItem("phone", phone);
             sessionStorage.setItem("email", email);
-            // Redirect to home page
             navigate("/");   //on directing to home page you need to give logic to change login and signup buttons with name of the user and logout button where you have implemented Navbar functionality
             window.location.reload();
         } else {
