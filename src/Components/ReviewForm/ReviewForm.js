@@ -15,9 +15,9 @@ const ReviewForm = ({ children }) => {
 
   useEffect(() => {
     const authtoken = sessionStorage.getItem("auth-token");
-    if (!authtoken) {
-      navigate("/login");
-    }
+    //if (!authtoken) {
+    //  navigate("/login");
+    //}
 
     const storedUsername = sessionStorage.getItem('email');
     let storedDoctorData = JSON.parse(localStorage.getItem('doctorData'));

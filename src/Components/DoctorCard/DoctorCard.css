@@ -107,7 +107,7 @@
 .modal-btn {
   display: inline-block;
   padding: 8px 16px;
-  background-color: #2196f3;
+  background-color: #b673f8;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -121,7 +121,7 @@
   width:320px;
 }
 .modal-btn:hover {
-  background-color: #0d8af5;
+  background-color: #a042fd;
 }
 
 .cancel-appointment-btn {
@@ -178,7 +178,7 @@ textarea {
 
 button {
   padding: 12px 20px;
-  background-color: #007bff;
+  background-color: #b673f8;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -187,7 +187,7 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #a042fd;
 }
 
 
