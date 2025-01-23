@@ -10,7 +10,7 @@
     font-family: Inter; 
     font-weight: 700; 
     word-wrap: break-word;
-    background: #3579F6; 
+    background: #b673f8; 
     border-radius: 10px;
     border:None;
     cursor: pointer;
@@ -42,7 +42,7 @@
 }
 
 .submit_btn:hover{
-    background-color:rgba(35,85,202, 1);
+    background-color:#b673f8;
     color:white;
 }
 
@@ -127,11 +127,11 @@
 
 .LoginPane a{
     text-decoration:none;
-    color:#2190FF;
+    color:#b673f8;
 }
 
 .LoginPane a:hover{
-    color:rgba(35,85,202, 1);
+    color:#b673f8;
 }
 
 .AreYouANewMemberSignUpHere{

@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import "./Landing_Page.css";
 
 const Landing_Page = () => {
@@ -9,10 +8,10 @@ const Landing_Page = () => {
           <div data-aos="fade-up" className="flex-hero">
               
               <h1>
-                Your Health<br/>
+                Staying Healthy<br/>
                 <span className="text-gradient">
                   
-                  Our Responsibility
+                  Made Easy
                 </span>
               </h1>
                 <div className="blob-cont">
@@ -22,7 +21,7 @@ const Landing_Page = () => {
                     <div className="blue1 blob"></div>
                 </div>
               <h4>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eaque at quae ducimus. Suscipit omnis quibusdam non cum rem voluptatem! 
+                Empowering smarter healthcare choices. Our health portal simplifies finding the right doctor for you. Browse doctor profiles, read patient reviews, and conveniently book appointments. We connect you with qualified professionals while fostering open communication through ratings. Our mission is to streamline your healthcare journey and ensure a positive patient experience.
               </h4>
               <a href="/Sign_Up">
                 <button className="button">Get Started</button>

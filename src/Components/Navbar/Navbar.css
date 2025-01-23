@@ -1,5 +1,5 @@
 .e1_3 { 
-	background-color:rgba(63.000000044703484, 138.00000697374344, 226.0000017285347, 0.75);
+	background-color:#9c41f7;
 	width:100%;
 	height:75px;
 	position:fixed;
@@ -11,7 +11,7 @@
 }
 
 .doctor_svg{
-	left:230px;
+	left:250px;
 	top:14px;
     position:absolute;
 }
@@ -33,7 +33,7 @@
 	top:18px;
 	font-family:Inter;
 	text-align:center;
-	font-size:32px;
+	font-size:28px;
 	letter-spacing:0;
 }
 .e1_3 .e26_461 { 
@@ -47,7 +47,7 @@
 .ei26_461_1_6 { 
 	background-color:rgba(255, 255, 255, 1);
     border:0;
-    color:rgba(54.00000058114529, 54.00000058114529, 54.00000058114529, 1);
+    color:#c78eff;
 	width:120px;
 	height:36px;
 	position:absolute;
@@ -66,7 +66,7 @@
 }
 
 .ei26_461_1_6:hover{
-    background-color:rgba(35,85,202, 1);
+    background-color:#c78eff;
     color:white;
 }
 .e1_3 .e40_620 { 
@@ -96,7 +96,7 @@
 }
 
 .e1_3 a:hover{
-    color:rgba(35,85,202, 1);
+    color:#c78eff;
 }
 
 .e1_3 .nav_links{
