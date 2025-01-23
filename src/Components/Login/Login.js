@@ -1,75 +1,80 @@
-import React from "react"; // Importing the necessary modules from React library
-import { Link } from "react-router-dom"; // Importing the Link component from react-router-dom library
-import "./Login.css"; // Importing the CSS styles for the Login component
-
-// Defining the Function component Login
+import './Login.css';
+import React, { useState, useEffect } from 'react';
+//Apply css according to your design theme or css that has been given to you in week 2 lab 2
+import { Link, useNavigate } from 'react-router-dom';
+import { API_URL } from '../../config';
 const Login = () => {
-  return (
-    <div className="container">
-      {/* Div for login grid layout */}
-      <div className="login-grid">
-        {/* Div for login text */}
-        <div className="login-text">
-          <h1>Login</h1>
-        </div>
-        {/* Additional login text with a link to Sign Up page */}
-        <div className="login-text1">
-          Are you a new member?
-            <span>
-            <Link to='/SignUp' style={{color: '#9570ff'}}> Sign Up</Link>
-            </span>
-        </div>
-        <br />
-        {/* Div for login form */}
-        <div className="login-form">
-          <form>
-            {/* Form group for email input */}
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                className="form-control"
-                placeholder="Enter your email"
-                aria-describedby="helpId"
-              />
-            </div>
-            {/* Form group for password input */}
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                className="form-control"
-                placeholder="Enter your password"
-                aria-describedby="helpId"
-              />
-            </div>
-            {/* Button group for login and reset buttons */}
-            <div className="btn-group">
-              <button
-                type="submit"
-                className="btn btn-primary mb-2 mr-1 waves-effect waves-light"
-              >
-                Login
-              </button>
-              <button
-                type="reset"
-                className="btn btn-danger mb-2 waves-effect waves-light"
-              >
-                Reset
-              </button>
-            </div>
-            <br />
-            {/* Additional login text for 'Forgot Password' option */}
-            <div className="login-text1">Forgot Password?</div>
-          </form>
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (sessionStorage.getItem("auth-token")) {
+      navigate("/");
+    }
+  }, []);
+  const login = async (e) => {
+    e.preventDefault();
+    const res = await fetch(`${API_URL}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        // name: name,
+        email:email,
+        password: password,
+      }),
+    });
+    const json = await res.json();
+    if (json.authtoken) {
+      sessionStorage.setItem('auth-token', json.authtoken);
+      sessionStorage.setItem('name', json.username.name);
+      sessionStorage.setItem('phone', json.username.phone);
+      sessionStorage.setItem('email', email);
+      navigate('/');
+      window.location.reload();
+    } else {
+      if (json.errors) {
+        for (const error of json.errors) {
+          alert(error.msg);
+        }
+      } else {
+        alert(json.error);
+      }
+    }
+  };
+
+  const resetForm = () => {
+    setPassword("");
+    setEmail("");
+  }
+
+    return(    
+    <div className="LoginPane">
+      <form onSubmit={login}>
+      <div className="LoginText">Login</div>
+      <div className="AreYouANewMemberSignUpHere">
+        <span className="areyouanewmember">Are you a new member? <a href="/Sign_Up">Sign Up Here</a></span>
+      </div>
+      
+      <div className="form_area">
+        <label className="label" for="email">Email (name@example.com)</label>
+        <input type="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}" name="email" id="email" className="form-control" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} aria-describedby="helpId"/>
+      </div>
+      <div className="form_area">
+        <label className="label" for="password">Password</label>
+        <div className="password_input"> 
+        <input autocomplete="none" type="password" name="password" id="password" required className="form-control" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} aria-describedby="helpId"/><i className="far fa-eye" id="togglePassword"></i>
         </div>
       </div>
-    </div>
-  );
-};
+      <div className="button_area">
+        <button type="reset" className="reset_btn" onClick={resetForm}>Reset</button>
+        <button type="submit" className="submit_btn">Submit</button>
+      </div>
+      </form>
+      <div className="ForgotPassword">Forgot Password?</div>
+  </div>
+    );
+}
 
-export default Login; // Exporting the Login component to be used in other parts of the application
+export default Login;
